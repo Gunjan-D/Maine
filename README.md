@@ -2,9 +2,9 @@
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Flag_of_Maine.svg/320px-Flag_of_Maine.svg.png" width="90" alt="Maine State Flag"/>
 
-# MaineDOT Phone Plan Cost Audit Dashboard
+# Phone Plan Cost Audit Dashboard
 
-**A professional data analytics project for the Maine Department of Transportation**
+**A professional data analytics project**
 
 [![Live Dashboard](https://img.shields.io/badge/🌐%20Live%20Dashboard-View%20Now-0d3e6e?style=for-the-badge)](https://gunjan-d.github.io/Maine/)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
@@ -26,10 +26,7 @@
 
 ## Project Overview
 
-This project delivers a **complete end-to-end data audit** of the Maine Department of Transportation's (MaineDOT) cellular phone plan expenditures. Using Python-powered analytics and an interactive web dashboard, it identifies where the department is over-paying and produces a concrete, actionable right-sizing plan — all without sacrificing employee connectivity.
-
-This was built as a showcase of analytical depth, financial thinking, and modern data communication skills for the **Management Analyst I** position within MaineDOT's Bureau of Finance & Administration.
-
+This project delivers a **complete end-to-end data audit** of the cellular phone plan expenditures. Using Python-powered analytics and an interactive web dashboard, it identifies where the department is over-paying and produces a concrete, actionable right-sizing plan — all without sacrificing employee connectivity
 ---
 
 ##  What Makes This Dashboard Stand Out
@@ -59,7 +56,7 @@ This was built as a showcase of analytical depth, financial thinking, and modern
 ##  Repository Structure
 
 ```
-Maine/
+
 ├── index.html              #  Static web dashboard (GitHub Pages)
 ├── dashboard.py            # Flask web server (run locally)
 ├── phone_plan_analysis.py  # Core data analysis script
@@ -129,7 +126,3 @@ python dashboard.py
 ---
 
 ---
-
-<div align="center">
-  <sub>Maine Department of Transportation · Bureau of Finance & Administration · Augusta, ME · April 2026</sub>
-</div>
