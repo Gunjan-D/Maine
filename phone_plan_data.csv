@@ -1,0 +1,21 @@
+EmpID,Name,Department,Plan_Tier,Plan_Cost,Data_GB,Voice_Min,Overage_Cost,Total_Monthly_Cost
+EMP001,Sarah Mitchell,Finance,Premium,80,0.8,320,0,80
+EMP002,James Thornton,Engineering,Standard,60,4.2,850,0,60
+EMP003,Patricia Ouellete,Maintenance,Standard,60,5.8,920,8,68
+EMP004,Robert Landry,Finance,Premium,80,0.5,210,0,80
+EMP005,Linda Pelletier,Planning,Basic,40,1.1,380,0,40
+EMP006,Michael Bouchard,IT,Premium,80,12.3,1200,0,80
+EMP007,Karen Arsenault,Administration,Basic,40,0.3,120,0,40
+EMP008,David Leblanc,Engineering,Premium,80,0.7,290,0,80
+EMP009,Susan Cyr,Planning,Standard,60,3.8,760,0,60
+EMP010,Thomas Michaud,Maintenance,Basic,40,2.4,410,4,44
+EMP011,Mary Violette,Administration,Standard,60,1.0,530,0,60
+EMP012,Richard Jalbert,Safety,Premium,80,11.8,980,0,80
+EMP013,Diane Lagrange,Finance,Standard,60,2.1,640,0,60
+EMP014,Joseph Dupuis,Engineering,Premium,80,14.1,1100,0,80
+EMP015,Carol Thibodeau,IT,Standard,60,4.9,870,0,60
+EMP016,Mark Poulin,Administration,Premium,80,0.6,180,0,80
+EMP017,Nancy Gauthier,Planning,Basic,40,1.8,420,0,40
+EMP018,Paul Fortin,Maintenance,Standard,60,5.2,940,0,60
+EMP019,Donna Racine,Safety,Standard,60,2.5,670,0,60
+EMP020,Steven Caron,Finance,Basic,40,0.9,310,0,40

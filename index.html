@@ -1,0 +1,813 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>MaineDOT — Phone Plan Cost Audit</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue:    #0d3e6e;
+    --accent:  #d4a017;
+    --danger:  #c62828;
+    --safe:    #2e7d32;
+    --warn:    #e65100;
+    --bg:      #f4f6f9;
+    --card:    #ffffff;
+    --border:  #dde3ea;
+    --text:    #1a2332;
+    --muted:   #5a6578;
+  }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+
+  /* Header */
+  header {
+    background: var(--blue);
+    color: #fff;
+    padding: 18px 32px 14px;
+    display: flex; align-items: center; gap: 18px;
+    border-bottom: 4px solid var(--accent);
+  }
+  .dot-badge {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--accent); display: flex; align-items: center;
+    justify-content: center; font-weight: 900; font-size: 18px; color: var(--blue); flex-shrink:0;
+  }
+  header h1 { font-size: 18px; font-weight: 700; }
+  header p  { font-size: 12px; opacity: .75; margin-top: 2px; }
+
+  /* Layout */
+  main { max-width: 1280px; margin: 0 auto; padding: 28px 24px; }
+
+  /* KPI strip */
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 14px; margin-bottom: 28px; }
+  .kpi  { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .kpi .val { font-size: 28px; font-weight: 700; color: var(--blue); }
+  .kpi .lbl { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .4px; }
+  .kpi.green .val { color: var(--safe); }
+  .kpi.red   .val { color: var(--danger); }
+
+  /* Charts grid */
+  .charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 28px; }
+  @media(max-width:900px){ .charts{ grid-template-columns:1fr; } }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .card h2 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
+
+  /* Table */
+  .tbl-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--blue); color: #fff; padding: 10px 14px; text-align:left; font-weight:600; font-size:12px; white-space:nowrap; }
+  tbody tr:nth-child(even) { background: #f8fafc; }
+  tbody td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
+  tbody tr.downgrade td:last-child { color: var(--danger); font-weight: 600; }
+  tbody tr.upgrade   td:last-child { color: var(--warn);   font-weight: 600; }
+  tbody tr:hover { background: #eef4ff; }
+
+  /* Pill badges */
+  .pill { display:inline-block; border-radius:20px; padding:2px 10px; font-size:11px; font-weight:600; }
+  .pill-basic    { background:#dbeafe; color:#1d4ed8; }
+  .pill-standard { background:#fef3c7; color:#92400e; }
+  .pill-premium  { background:#fee2e2; color:#991b1b; }
+
+  /* Savings box */
+  .savings-box {
+    background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 10px;
+    padding: 20px 26px; margin-bottom: 28px;
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .savings-box .big { font-size: 36px; font-weight: 800; color: var(--safe); }
+  .savings-box p   { margin-top:4px; color:#2e7d32; font-size:13px; }
+
+  /* Footer */
+  footer { text-align:center; color: var(--muted); font-size:11px; padding:24px; border-top:1px solid var(--border); margin-top:10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="dot-badge">ME</div>
+  <div>
+    <h1>Maine Department of Transportation — Cellphone Plan Cost Audit</h1>
+    <p>Bureau of Finance &amp; Administration &nbsp;|&nbsp; Augusta, ME &nbsp;|&nbsp; Management Analyst I Demo &nbsp;|&nbsp; April 2026</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- KPI Strip -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="val">20</div>
+      <div class="lbl">Employees Audited</div>
+    </div>
+    <div class="kpi">
+      <div class="val">$1252.00</div>
+      <div class="lbl">Current Monthly Spend</div>
+    </div>
+    <div class="kpi">
+      <div class="val">$15,024</div>
+      <div class="lbl">Current Annual Spend</div>
+    </div>
+    <div class="kpi red">
+      <div class="val">7</div>
+      <div class="lbl">Employees Flagged for Right-Sizing</div>
+    </div>
+    <div class="kpi green">
+      <div class="val">$1,824</div>
+      <div class="lbl">Projected Annual Savings</div>
+    </div>
+    <div class="kpi green">
+      <div class="val">12.1%</div>
+      <div class="lbl">Budget Reduction</div>
+    </div>
+  </div>
+
+  <!-- Savings callout -->
+  <div class="savings-box">
+    <div>
+      <div class="big">$1,824 / year</div>
+      <p>Net savings after right-sizing 5 over-provisioned &amp; 2 under-provisioned employees &mdash; <strong>12.1% reduction</strong> at zero service impact.</p>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts">
+    <div class="card">
+      <h2>Cost vs. Data Usage (by Plan Tier)</h2>
+      <canvas id="scatterChart" height="220"></canvas>
+    </div>
+    <div class="card">
+      <h2>Monthly Spend by Department</h2>
+      <canvas id="deptChart" height="220"></canvas>
+    </div>
+    <div class="card">
+      <h2>Plan Tier Distribution</h2>
+      <canvas id="donutChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- Full Data Table -->
+  <div class="card" style="margin-bottom:28px;">
+    <h2>All Employees — Plan Review</h2>
+    <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Name</th><th>Department</th><th>Plan Tier</th>
+          <th>Plan Cost</th><th>Data Used (GB)</th><th>Utilization %</th>
+          <th>Overage $</th><th>Cost / GB</th><th>Recommendation</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr class="downgrade">
+          <td>1</td>
+          <td><strong>Sarah Mitchell</strong></td>
+          <td>Finance</td>
+          <td>
+            <span class="pill pill-premium">Premium</span>
+          </td>
+          <td>$80</td>
+          <td>0.8</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:5.3%;background:#e53935;height:8px;border-radius:4px;"></div>
+              </div>
+              5.3%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$100.0</td>
+          <td>Downgrade to Basic</td>
+        </tr>
+        
+        <tr class="">
+          <td>2</td>
+          <td><strong>James Thornton</strong></td>
+          <td>Engineering</td>
+          <td>
+            <span class="pill pill-standard">Standard</span>
+            
+          </td>
+          <td>$60</td>
+          <td>4.2</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:84.0%;background:#43a047;height:8px;border-radius:4px;"></div>
+              </div>
+              84.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$14.29</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="upgrade">
+          <td>3</td>
+          <td><strong>Patricia Ouellete</strong></td>
+          <td>Maintenance</td>
+          <td>
+            <span class="pill pill-standard">Standard</span>
+            
+          </td>
+          <td>$60</td>
+          <td>5.8</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:100%;background:#43a047;height:8px;border-radius:4px;"></div>
+              </div>
+              116.0%
+            </div>
+          </td>
+          <td><span style="color:#c62828;font-weight:600;">$8</span></td>
+          <td>$11.72</td>
+          <td>Upgrade Plan</td>
+        </tr>
+        
+        <tr class="downgrade">
+          <td>4</td>
+          <td><strong>Robert Landry</strong></td>
+          <td>Finance</td>
+          <td>
+            <span class="pill pill-premium">Premium</span>
+          </td>
+          <td>$80</td>
+          <td>0.5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:3.3%;background:#e53935;height:8px;border-radius:4px;"></div>
+              </div>
+              3.3%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$160.0</td>
+          <td>Downgrade to Basic</td>
+        </tr>
+        
+        <tr class="">
+          <td>5</td>
+          <td><strong>Linda Pelletier</strong></td>
+          <td>Planning</td>
+          <td>
+            <span class="pill pill-basic">Basic</span>
+            
+          </td>
+          <td>$40</td>
+          <td>1.1</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:55.0%;background:#ffa726;height:8px;border-radius:4px;"></div>
+              </div>
+              55.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$36.36</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="">
+          <td>6</td>
+          <td><strong>Michael Bouchard</strong></td>
+          <td>IT</td>
+          <td>
+            <span class="pill pill-premium">Premium</span>
+          </td>
+          <td>$80</td>
+          <td>12.3</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:82.0%;background:#43a047;height:8px;border-radius:4px;"></div>
+              </div>
+              82.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$6.5</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="">
+          <td>7</td>
+          <td><strong>Karen Arsenault</strong></td>
+          <td>Administration</td>
+          <td>
+            <span class="pill pill-basic">Basic</span>
+            
+          </td>
+          <td>$40</td>
+          <td>0.3</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:15.0%;background:#e53935;height:8px;border-radius:4px;"></div>
+              </div>
+              15.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$133.33</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="downgrade">
+          <td>8</td>
+          <td><strong>David Leblanc</strong></td>
+          <td>Engineering</td>
+          <td>
+            <span class="pill pill-premium">Premium</span>
+          </td>
+          <td>$80</td>
+          <td>0.7</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:4.7%;background:#e53935;height:8px;border-radius:4px;"></div>
+              </div>
+              4.7%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$114.29</td>
+          <td>Downgrade to Basic</td>
+        </tr>
+        
+        <tr class="">
+          <td>9</td>
+          <td><strong>Susan Cyr</strong></td>
+          <td>Planning</td>
+          <td>
+            <span class="pill pill-standard">Standard</span>
+            
+          </td>
+          <td>$60</td>
+          <td>3.8</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:76.0%;background:#43a047;height:8px;border-radius:4px;"></div>
+              </div>
+              76.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$15.79</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="upgrade">
+          <td>10</td>
+          <td><strong>Thomas Michaud</strong></td>
+          <td>Maintenance</td>
+          <td>
+            <span class="pill pill-basic">Basic</span>
+            
+          </td>
+          <td>$40</td>
+          <td>2.4</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:100%;background:#43a047;height:8px;border-radius:4px;"></div>
+              </div>
+              120.0%
+            </div>
+          </td>
+          <td><span style="color:#c62828;font-weight:600;">$4</span></td>
+          <td>$18.33</td>
+          <td>Upgrade Plan</td>
+        </tr>
+        
+        <tr class="downgrade">
+          <td>11</td>
+          <td><strong>Mary Violette</strong></td>
+          <td>Administration</td>
+          <td>
+            <span class="pill pill-standard">Standard</span>
+            
+          </td>
+          <td>$60</td>
+          <td>1.0</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:20.0%;background:#e53935;height:8px;border-radius:4px;"></div>
+              </div>
+              20.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$60.0</td>
+          <td>Downgrade to Basic</td>
+        </tr>
+        
+        <tr class="">
+          <td>12</td>
+          <td><strong>Richard Jalbert</strong></td>
+          <td>Safety</td>
+          <td>
+            <span class="pill pill-premium">Premium</span>
+          </td>
+          <td>$80</td>
+          <td>11.8</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:78.7%;background:#43a047;height:8px;border-radius:4px;"></div>
+              </div>
+              78.7%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$6.78</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="">
+          <td>13</td>
+          <td><strong>Diane Lagrange</strong></td>
+          <td>Finance</td>
+          <td>
+            <span class="pill pill-standard">Standard</span>
+            
+          </td>
+          <td>$60</td>
+          <td>2.1</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:42.0%;background:#ffa726;height:8px;border-radius:4px;"></div>
+              </div>
+              42.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$28.57</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="">
+          <td>14</td>
+          <td><strong>Joseph Dupuis</strong></td>
+          <td>Engineering</td>
+          <td>
+            <span class="pill pill-premium">Premium</span>
+          </td>
+          <td>$80</td>
+          <td>14.1</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:94.0%;background:#43a047;height:8px;border-radius:4px;"></div>
+              </div>
+              94.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$5.67</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="">
+          <td>15</td>
+          <td><strong>Carol Thibodeau</strong></td>
+          <td>IT</td>
+          <td>
+            <span class="pill pill-standard">Standard</span>
+            
+          </td>
+          <td>$60</td>
+          <td>4.9</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:98.0%;background:#43a047;height:8px;border-radius:4px;"></div>
+              </div>
+              98.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$12.24</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="downgrade">
+          <td>16</td>
+          <td><strong>Mark Poulin</strong></td>
+          <td>Administration</td>
+          <td>
+            <span class="pill pill-premium">Premium</span>
+          </td>
+          <td>$80</td>
+          <td>0.6</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:4.0%;background:#e53935;height:8px;border-radius:4px;"></div>
+              </div>
+              4.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$133.33</td>
+          <td>Downgrade to Basic</td>
+        </tr>
+        
+        <tr class="">
+          <td>17</td>
+          <td><strong>Nancy Gauthier</strong></td>
+          <td>Planning</td>
+          <td>
+            <span class="pill pill-basic">Basic</span>
+            
+          </td>
+          <td>$40</td>
+          <td>1.8</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:90.0%;background:#43a047;height:8px;border-radius:4px;"></div>
+              </div>
+              90.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$22.22</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="">
+          <td>18</td>
+          <td><strong>Paul Fortin</strong></td>
+          <td>Maintenance</td>
+          <td>
+            <span class="pill pill-standard">Standard</span>
+            
+          </td>
+          <td>$60</td>
+          <td>5.2</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:100%;background:#43a047;height:8px;border-radius:4px;"></div>
+              </div>
+              104.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$11.54</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="">
+          <td>19</td>
+          <td><strong>Donna Racine</strong></td>
+          <td>Safety</td>
+          <td>
+            <span class="pill pill-standard">Standard</span>
+            
+          </td>
+          <td>$60</td>
+          <td>2.5</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:50.0%;background:#ffa726;height:8px;border-radius:4px;"></div>
+              </div>
+              50.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$24.0</td>
+          <td>—</td>
+        </tr>
+        
+        <tr class="">
+          <td>20</td>
+          <td><strong>Steven Caron</strong></td>
+          <td>Finance</td>
+          <td>
+            <span class="pill pill-basic">Basic</span>
+            
+          </td>
+          <td>$40</td>
+          <td>0.9</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:60px;background:#e0e0e0;border-radius:4px;height:8px;">
+                <div style="width:45.0%;background:#ffa726;height:8px;border-radius:4px;"></div>
+              </div>
+              45.0%
+            </div>
+          </td>
+          <td>—</td>
+          <td>$44.44</td>
+          <td>—</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- Downgrade Savings breakdown -->
+  <div class="card">
+    <h2>Right-Sizing Action Summary</h2>
+    <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Employee</th><th>Department</th><th>Current Plan</th><th>Action</th><th>Monthly Impact</th><th>Annual Impact</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr class="downgrade">
+          <td><strong>Sarah Mitchell</strong></td>
+          <td>Finance</td>
+          <td>Premium ($80/mo)</td>
+          <td>Downgrade  →  Basic ($40/mo)</td>
+          <td style="font-weight:600; color:#2e7d32">
+            -$40
+          </td>
+          <td style="font-weight:600; color:#2e7d32">
+            -$480
+          </td>
+        </tr>
+        
+        <tr class="downgrade">
+          <td><strong>Robert Landry</strong></td>
+          <td>Finance</td>
+          <td>Premium ($80/mo)</td>
+          <td>Downgrade  →  Basic ($40/mo)</td>
+          <td style="font-weight:600; color:#2e7d32">
+            -$40
+          </td>
+          <td style="font-weight:600; color:#2e7d32">
+            -$480
+          </td>
+        </tr>
+        
+        <tr class="downgrade">
+          <td><strong>David Leblanc</strong></td>
+          <td>Engineering</td>
+          <td>Premium ($80/mo)</td>
+          <td>Downgrade  →  Basic ($40/mo)</td>
+          <td style="font-weight:600; color:#2e7d32">
+            -$40
+          </td>
+          <td style="font-weight:600; color:#2e7d32">
+            -$480
+          </td>
+        </tr>
+        
+        <tr class="downgrade">
+          <td><strong>Mary Violette</strong></td>
+          <td>Administration</td>
+          <td>Standard ($60/mo)</td>
+          <td>Downgrade  →  Basic ($40/mo)</td>
+          <td style="font-weight:600; color:#2e7d32">
+            -$20
+          </td>
+          <td style="font-weight:600; color:#2e7d32">
+            -$240
+          </td>
+        </tr>
+        
+        <tr class="downgrade">
+          <td><strong>Mark Poulin</strong></td>
+          <td>Administration</td>
+          <td>Premium ($80/mo)</td>
+          <td>Downgrade  →  Basic ($40/mo)</td>
+          <td style="font-weight:600; color:#2e7d32">
+            -$40
+          </td>
+          <td style="font-weight:600; color:#2e7d32">
+            -$480
+          </td>
+        </tr>
+        
+        <tr class="upgrade">
+          <td><strong>Patricia Ouellete</strong></td>
+          <td>Maintenance</td>
+          <td>Standard ($60/mo)</td>
+          <td>Upgrade  →  Premium ($80/mo)</td>
+          <td style="font-weight:600; color:#c62828">
+            +$12
+          </td>
+          <td style="font-weight:600; color:#c62828">
+            +$144
+          </td>
+        </tr>
+        
+        <tr class="upgrade">
+          <td><strong>Thomas Michaud</strong></td>
+          <td>Maintenance</td>
+          <td>Basic ($40/mo)</td>
+          <td>Upgrade  →  Standard ($60/mo)</td>
+          <td style="font-weight:600; color:#c62828">
+            +$16
+          </td>
+          <td style="font-weight:600; color:#c62828">
+            +$192
+          </td>
+        </tr>
+        
+        <tr style="background:#e8f5e9;font-weight:700;">
+          <td colspan="4">NET SAVINGS</td>
+          <td style="color:#2e7d32;">-$152/mo</td>
+          <td style="color:#2e7d32;">-$1,824/yr (12.1%)</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  MaineDOT Bureau of Finance &amp; Administration &nbsp;|&nbsp; Phone Plan Cost Audit &nbsp;|&nbsp; April 4, 2026 &nbsp;|&nbsp; Prepared by: Management Analyst I Candidate
+</footer>
+
+<script>
+// ── Scatter Chart ──────────────────────────────────────────────────────────
+const scatterRaw = [{"backgroundColor": "#1E88E5", "data": [{"flag": "No Change", "label": "Linda Pelletier", "x": 1.1, "y": 40}, {"flag": "No Change", "label": "Karen Arsenault", "x": 0.3, "y": 40}, {"flag": "Upgrade Plan", "label": "Thomas Michaud", "x": 2.4, "y": 44}, {"flag": "No Change", "label": "Nancy Gauthier", "x": 1.8, "y": 40}, {"flag": "No Change", "label": "Steven Caron", "x": 0.9, "y": 40}], "label": "Basic"}, {"backgroundColor": "#E53935", "data": [{"flag": "Downgrade to Basic", "label": "Sarah Mitchell", "x": 0.8, "y": 80}, {"flag": "Downgrade to Basic", "label": "Robert Landry", "x": 0.5, "y": 80}, {"flag": "No Change", "label": "Michael Bouchard", "x": 12.3, "y": 80}, {"flag": "Downgrade to Basic", "label": "David Leblanc", "x": 0.7, "y": 80}, {"flag": "No Change", "label": "Richard Jalbert", "x": 11.8, "y": 80}, {"flag": "No Change", "label": "Joseph Dupuis", "x": 14.1, "y": 80}, {"flag": "Downgrade to Basic", "label": "Mark Poulin", "x": 0.6, "y": 80}], "label": "Premium"}, {"backgroundColor": "#FFA726", "data": [{"flag": "No Change", "label": "James Thornton", "x": 4.2, "y": 60}, {"flag": "Upgrade Plan", "label": "Patricia Ouellete", "x": 5.8, "y": 68}, {"flag": "No Change", "label": "Susan Cyr", "x": 3.8, "y": 60}, {"flag": "Downgrade to Basic", "label": "Mary Violette", "x": 1.0, "y": 60}, {"flag": "No Change", "label": "Diane Lagrange", "x": 2.1, "y": 60}, {"flag": "No Change", "label": "Carol Thibodeau", "x": 4.9, "y": 60}, {"flag": "No Change", "label": "Paul Fortin", "x": 5.2, "y": 60}, {"flag": "No Change", "label": "Donna Racine", "x": 2.5, "y": 60}], "label": "Standard"}];
+const scatterDatasets = scatterRaw.map(ds => ({
+  label: ds.label,
+  data: ds.data.map(p => ({ x: p.x, y: p.y, name: p.label, flag: p.flag })),
+  backgroundColor: ds.backgroundColor,
+  pointRadius: ds.data.map(p => p.flag !== "No Change" ? 9 : 6),
+  pointStyle:  ds.data.map(p => p.flag === "Downgrade to Basic" ? "rectRot" : p.flag === "Upgrade Plan" ? "triangle" : "circle"),
+}));
+
+new Chart(document.getElementById("scatterChart"), {
+  type: "scatter",
+  data: { datasets: scatterDatasets },
+  options: {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.raw.name} — ${ctx.raw.x} GB @ $${ctx.raw.y}/mo${ctx.raw.flag !== "No Change" ? " ⚑ " + ctx.raw.flag : ""}`,
+        }
+      },
+      legend: { position: "top", labels: { boxWidth: 12, font: { size: 11 } } }
+    },
+    scales: {
+      x: { title: { display: true, text: "Monthly Data (GB)" } },
+      y: { title: { display: true, text: "Monthly Cost ($)" } }
+    }
+  }
+});
+
+// ── Dept Bar Chart ─────────────────────────────────────────────────────────
+new Chart(document.getElementById("deptChart"), {
+  type: "bar",
+  data: {
+    labels: ["Finance", "Engineering", "Administration", "Maintenance", "IT", "Planning", "Safety"],
+    datasets: [{
+      label: "Monthly Spend ($)",
+      data: [260, 220, 180, 172, 140, 140, 140],
+      backgroundColor: "#1565C0",
+      borderRadius: 5
+    }]
+  },
+  options: {
+    indexAxis: "y",
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { title: { display: true, text: "$ / Month" } },
+      y: { ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ── Donut Chart ───────────────────────────────────────────────────────────
+new Chart(document.getElementById("donutChart"), {
+  type: "doughnut",
+  data: {
+    labels: ["Basic", "Standard", "Premium"],
+    datasets: [{
+      data: [5, 8, 7],
+      backgroundColor: ["#1E88E5", "#FFA726", "#E53935"],
+      borderWidth: 2
+    }]
+  },
+  options: {
+    cutout: "55%",
+    plugins: {
+      legend: { position: "bottom", labels: { font: { size: 11 } } },
+      tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} employees` } }
+    }
+  }
+});
+</script>
+</body>
+</html>
