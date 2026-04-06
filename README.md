@@ -2,7 +2,7 @@
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Flag_of_Maine.svg/320px-Flag_of_Maine.svg.png" width="90" alt="Maine State Flag"/>
 
-# 📊 MaineDOT Phone Plan Cost Audit Dashboard
+# MaineDOT Phone Plan Cost Audit Dashboard
 
 **A professional data analytics project for the Maine Department of Transportation**
 
@@ -16,15 +16,15 @@
 
 ---
 
-## 🌐 Live Website
+## Live Website
 
-👉 **[https://gunjan-d.github.io/Maine/](https://gunjan-d.github.io/Maine/)**
+ **[https://gunjan-d.github.io/Maine/](https://gunjan-d.github.io/Maine/)**
 
 > Fully interactive dashboard — works on desktop and mobile, no account or login required.
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 This project delivers a **complete end-to-end data audit** of the Maine Department of Transportation's (MaineDOT) cellular phone plan expenditures. Using Python-powered analytics and an interactive web dashboard, it identifies where the department is over-paying and produces a concrete, actionable right-sizing plan — all without sacrificing employee connectivity.
 
@@ -32,35 +32,35 @@ This was built as a showcase of analytical depth, financial thinking, and modern
 
 ---
 
-## ✨ What Makes This Dashboard Stand Out
+##  What Makes This Dashboard Stand Out
 
-### 🔍 Rigorous Data Analysis
+### Rigorous Data Analysis
 - Audited **15 employee phone plans** across 5 departments
 - Computed utilization rates, cost-per-GB efficiency ratios, and overage patterns
 - Flagged employees whose plans are significantly over- or under-provisioned
 
-### 💰 Clear Financial Impact
+###  Clear Financial Impact
 - Identified **$2,280 in projected annual savings** — a meaningful reduction with zero service degradation
 - Presented both downgrade savings and upgrade costs transparently, so decision-makers see the true net impact
 
-### 📈 Beautiful, Professional Visualizations
+###  Beautiful, Professional Visualizations
 - **Scatter plot** — plots every employee by data usage vs. cost, color-coded by plan tier with flagged outliers clearly marked
 - **Bar chart** — department-by-department monthly spend breakdown
 - **Donut chart** — plan tier distribution across all staff
 - **Interactive tooltips** on every chart for drill-down details
 
-### 📋 Actionable Tables
+### Actionable Tables
 - Full employee roster with inline utilization progress bars, color-coded recommendations, and sortable data
 - Right-sizing action summary with per-employee monthly and annual cost impact
 - Net savings roll-up row at the bottom
 
 ---
 
-## 🗂️ Repository Structure
+##  Repository Structure
 
 ```
 Maine/
-├── index.html              # 🌐 Static web dashboard (GitHub Pages)
+├── index.html              #  Static web dashboard (GitHub Pages)
 ├── dashboard.py            # Flask web server (run locally)
 ├── phone_plan_analysis.py  # Core data analysis script
 ├── phone_plan_data.csv     # Source dataset (15 employees)
@@ -73,7 +73,7 @@ Maine/
 
 ---
 
-## 🚀 Run It Locally
+##  Run It Locally
 
 ```bash
 # 1. Clone the repo
@@ -92,7 +92,7 @@ python dashboard.py
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -104,7 +104,7 @@ python dashboard.py
 
 ---
 
-## 📐 Methodology
+## Methodology
 
 1. **Data Ingestion** — Loaded employee phone plan records from CSV, including plan tier, monthly cost, data usage, and overage charges
 2. **Utilization Calculation** — Compared actual data usage against plan limits to compute a utilization percentage for each employee
@@ -116,7 +116,7 @@ python dashboard.py
 
 ---
 
-## 📊 Key Findings
+## Key Findings
 
 | Metric | Value |
 |---|---|
@@ -127,12 +127,6 @@ python dashboard.py
 | Budget Reduction | **~21%** |
 
 ---
-
-## 👤 About
-
-Built by **Gunjan Deshmukh** as part of a competitive application for the Management Analyst I role at the Maine Department of Transportation.
-
-> *"Turning raw data into clear decisions — that's the job."*
 
 ---
 
