@@ -1,6 +1,5 @@
 <div align="center">
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Flag_of_Maine.svg/320px-Flag_of_Maine.svg.png" width="90" alt="Maine State Flag"/>
 
 # Phone Plan Cost Audit Dashboard
 
